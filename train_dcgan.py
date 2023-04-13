@@ -21,7 +21,7 @@ def train():
         generator_feature_map_size=128,
         discriminator_feature_map_size=128,
         img_dimensions=(3, 128, 128),
-        n_discriminator_steps=5,
+        n_discriminator_steps=1,
         lr=1e-4,
         b1=0.5,  # Momentum based does not do well. Plan to change
         b2=0.999,
@@ -40,7 +40,7 @@ def train():
         mode="min",
     )
     trainer = pl.Trainer(
-        accelerator="mps",  # "gpu",
+        accelerator="cpu",  # "gpu",
         callbacks=[checkpoint_callback],
         max_epochs=10,
         # logger=wandb_logger,
