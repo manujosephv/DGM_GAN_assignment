@@ -7,12 +7,12 @@ from datamodules import BitMojiDataModule
 
 
 def train():
-    # wandb.login(key="1a6be1c224ac6e7582f1f314f2409a5d403324a0")
+    wandb.login(key="1a6be1c224ac6e7582f1f314f2409a5d403324a0")
     UPSAMPLE = False
     dm = BitMojiDataModule(
         root_dir="data/bitmojis",
-        batch_size=512,
-        num_workers=0,
+        batch_size=64,
+        num_workers=4,
         size=128,
     )
     dm.setup()
@@ -30,7 +30,7 @@ def train():
     tag = "upsampled" if UPSAMPLE else "transpose"
     uid = uuid.uuid4()
     # Wandb logger
-    # wandb_logger = pl.loggers.WandbLogger(project="GAN", name=f"DCGAN_{tag}_{uid}")
+    wandb_logger = pl.loggers.WandbLogger(project="GAN", name=f"DCGAN_{tag}_{uid}")
     # es = pl.callbacks.EarlyStopping(monitor="val_loss", patience=5)
     checkpoint_callback = pl.callbacks.ModelCheckpoint(
         monitor="g_loss",
@@ -40,11 +40,11 @@ def train():
         mode="min",
     )
     trainer = pl.Trainer(
-        accelerator="cpu",  # "gpu",
+        accelerator="gpu",  # "gpu",
         callbacks=[checkpoint_callback],
         max_epochs=10,
-        # logger=wandb_logger,
-        fast_dev_run=True,
+        logger=wandb_logger,
+        fast_dev_run=False,
     )
     trainer.fit(model, dm)
 
