@@ -1,0 +1,9 @@
+# pytorch
+pytorch-lightning
+omegaconf
+wandb
+numpy
+pandas
+rich
+matplotlib
+torchmetrics[image]
