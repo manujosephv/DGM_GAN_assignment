@@ -53,7 +53,7 @@ class DCGAN(LightningModule):
         self.discriminator = ConvDiscriminator(
             num_channels=self._channels, feature_map_sz=discriminator_feature_map_size
         )
-        self.fixed_noise = torch.randn(64, latent_dim, 1, 1)
+        self.fixed_noise = torch.randn(64, latent_dim)
 
     def forward(self, z):
         return self.generator(z)
