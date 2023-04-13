@@ -119,7 +119,7 @@ class DCGAN(LightningModule):
         opt_d = torch.optim.Adam(self.discriminator.parameters(), lr=lr, betas=(b1, b2))
         return [opt_g, opt_d], []
 
-    def on_validation_epoch_end(self):
+    def on_train_epoch_end(self):
         z = self.fixed_noise.to(self.device)
         # log sampled images
         sample_imgs = self(z)
