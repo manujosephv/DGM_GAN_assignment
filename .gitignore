@@ -162,3 +162,4 @@ data/
 .vscode/
 wandb/
 .DS_Store
+_pat
