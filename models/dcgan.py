@@ -123,5 +123,7 @@ class DCGAN(LightningModule):
         z = self.fixed_noise.to(self.device)
         # log sampled images
         sample_imgs = self(z)
-        grid = torchvision.utils.make_grid(sample_imgs)
-        self.logger.log_image("generated_images", grid)
+        # grid = torchvision.utils.make_grid(sample_imgs)
+        # split into list of images
+        sample_imgs = [sample_imgs[i] for i in range(sample_imgs.shape[0])]
+        self.logger.log_image("generated_images", sample_imgs)
