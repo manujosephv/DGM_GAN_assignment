@@ -124,4 +124,4 @@ class DCGAN(LightningModule):
         # log sampled images
         sample_imgs = self(z)
         grid = torchvision.utils.make_grid(sample_imgs)
-        self.logger.experiment.add_image("generated_images", grid, self.current_epoch)
+        self.logger.log_image("generated_images", grid)
