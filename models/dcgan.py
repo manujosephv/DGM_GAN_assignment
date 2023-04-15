@@ -13,7 +13,11 @@ from models.modules import (
 # custom weights initialization called on ``netG`` and ``netD``
 def weights_init(m):
     classname = m.__class__.__name__
-    if classname in ["ConvDiscriminator", "ConvGeneratorTranspose", "ConvGeneratorUpsample"]:
+    if classname in [
+        "ConvDiscriminator",
+        "ConvGeneratorTranspose",
+        "ConvGeneratorUpsample",
+    ]:
         return  # don't init these
     if classname.find("Conv") != -1:
         nn.init.normal_(m.weight.data, 0.0, 0.02)
@@ -137,20 +141,12 @@ class DCGAN(LightningModule):
             # Update G
             optimizer_g.step()
             self.untoggle_optimizer(optimizer_g)
-            self.log(
-                "g_loss", errG, on_step=True, on_epoch=True, prog_bar=False, logger=True
-            )
-            self.log(
-                "d_loss", errD, on_step=True, on_epoch=True, prog_bar=False, logger=True
-            )
-            self.log(
-                "D(x)", D_x, on_step=True, on_epoch=True, prog_bar=True, logger=True
-            )
+            self.log("g_loss", errG, prog_bar=False, logger=True)
+            self.log("d_loss", errD, prog_bar=False, logger=True)
+            self.log("D(x)", D_x, prog_bar=True, logger=True)
             self.log(
                 "D(G(z1))",
                 D_G_z1,
-                on_step=True,
-                on_epoch=True,
                 prog_bar=True,
                 logger=True,
             )
