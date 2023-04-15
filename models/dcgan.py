@@ -13,6 +13,8 @@ from models.modules import (
 # custom weights initialization called on ``netG`` and ``netD``
 def weights_init(m):
     classname = m.__class__.__name__
+    if classname in ["ConvDiscriminator", "ConvGeneratorTranspose", "ConvGeneratorUpsample"]:
+        return  # don't init these
     if classname.find("Conv") != -1:
         nn.init.normal_(m.weight.data, 0.0, 0.02)
     elif classname.find("BatchNorm") != -1:
