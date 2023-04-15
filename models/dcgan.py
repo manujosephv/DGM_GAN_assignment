@@ -1,7 +1,6 @@
 import torch
 import torch.nn.functional as F
 import torch.nn as nn
-import torchvision
 from pytorch_lightning import LightningModule
 
 from models.modules import (
@@ -95,7 +94,7 @@ class DCGAN(LightningModule):
         # (1) Update D network: maximize log(D(x)) + log(1 - D(G(z)))
         ###########################
         self.toggle_optimizer(optimizer_d)
-        ## Train with all-real batch
+        # Train with all-real batch
         optimizer_d.zero_grad()
         output = self.discriminator(imgs)
         # Calculate loss on all-real batch
@@ -104,7 +103,7 @@ class DCGAN(LightningModule):
         self.manual_backward(errD_real)
         D_x = output.mean().item()
 
-        ## Train with all-fake batch
+        # Train with all-fake batch
         # Classify all fake batch with D
         output = self.discriminator(generated_imgs.detach())
         # Calculate D's loss on the all-fake batch
