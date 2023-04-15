@@ -153,8 +153,6 @@ class DCGAN(LightningModule):
             self.log(
                 "D(G(z2))",
                 D_G_z2,
-                on_step=True,
-                on_epoch=True,
                 prog_bar=True,
                 logger=True,
             )
