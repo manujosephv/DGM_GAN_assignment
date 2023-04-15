@@ -49,6 +49,8 @@ class BitMojiDataModule(pl.LightningDataModule):
                 [
                     transforms.ToTensor(),
                     transforms.Resize((self.size, self.size)),
+                    # scale between -1 and 1
+                    transforms.Normalize((0.5,), (0.5,)),
                 ]
             )
             self.dataset = BitMojiDataset(self.root_dir, transform)
@@ -122,6 +124,8 @@ class SVHNMNISTDataModule(pl.LightningDataModule):
                 [
                     transforms.ToTensor(),
                     transforms.Resize((self.size, self.size)),
+                    # scale between -1 and 1
+                    transforms.Normalize((0.5,), (0.5,)),
                 ]
             )
             self.svhn_dataset_train = SVHN(
