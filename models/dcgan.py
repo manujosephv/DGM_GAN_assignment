@@ -1,5 +1,6 @@
 import torch
 import torch.nn.functional as F
+import torch.nn as nn
 import torchvision
 from pytorch_lightning import LightningModule
 
@@ -9,6 +10,14 @@ from models.modules import (
     ConvGeneratorUpsample,
 )
 
+# custom weights initialization called on ``netG`` and ``netD``
+def weights_init(m):
+    classname = m.__class__.__name__
+    if classname.find('Conv') != -1:
+        nn.init.normal_(m.weight.data, 0.0, 0.02)
+    elif classname.find('BatchNorm') != -1:
+        nn.init.normal_(m.weight.data, 1.0, 0.02)
+        nn.init.constant_(m.bias.data, 0)
 
 class DCGAN(LightningModule):
     def __init__(
@@ -50,9 +59,11 @@ class DCGAN(LightningModule):
                 feature_map_sz=generator_feature_map_size,
                 num_channels=self._channels,
             )
+        self.generator.apply(weights_init)
         self.discriminator = ConvDiscriminator(
             num_channels=self._channels, feature_map_sz=discriminator_feature_map_size
         )
+        self.discriminator.apply(weights_init)
         self.fixed_noise = torch.randn(64, latent_dim)
 
     def forward(self, z):
@@ -76,6 +87,7 @@ class DCGAN(LightningModule):
         )
         # generate images
         generated_imgs = self(z)
+
         # Training generator every n_discriminator steps
         if (batch_idx + 1) % self.n_discriminator_steps == 0:
             # train generator
@@ -90,7 +102,7 @@ class DCGAN(LightningModule):
             optimizer_g.zero_grad()
             self.untoggle_optimizer(optimizer_g)
 
-        # train discriminator
+        # Train discriminator
         # Measure discriminator's ability to classify real from generated samples
         self.toggle_optimizer(optimizer_d)
 
