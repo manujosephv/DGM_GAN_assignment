@@ -164,3 +164,4 @@ wandb/
 .DS_Store
 _pat
 lightning_logs/
+checkpoints/
