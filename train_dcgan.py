@@ -13,14 +13,14 @@ def train():
         root_dir="data/bitmojis",
         batch_size=64,
         num_workers=4,
-        size=128,
+        size=64,
     )
     dm.setup()
     model = DCGAN(
         latent_dim=100,
-        generator_feature_map_size=128,
-        discriminator_feature_map_size=128,
-        img_dimensions=(3, 128, 128),
+        generator_feature_map_size=64,
+        discriminator_feature_map_size=64,
+        img_dimensions=(3, 64, 64),
         n_discriminator_steps=1,
         lr=1e-4,
         b1=0.5,  # Momentum based does not do well. Plan to change
