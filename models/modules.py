@@ -58,14 +58,17 @@ class ConvGeneratorUpsample(nn.Module):
             nn.Conv2d(128, 64, 3, stride=1, padding=1),
             nn.BatchNorm2d(64, 0.8),
             nn.LeakyReLU(0.2, inplace=True),
-            nn.Conv2d(64, feature_map_sz, num_channels, stride=1, padding=1),
+            nn.Conv2d(64, num_channels, 1, stride=1, padding=0),
             nn.Tanh(),
         )
 
     def forward(self, z):
         out = self.l1(z)
         out = out.view(out.shape[0], 128, self.init_size, self.init_size)
-        return self.conv_blocks(out)
+        for layer in self.conv_blocks:
+            out = layer(out)
+        return out
+        # return self.conv_blocks(out)
 
 
 class ConvDiscriminator(nn.Module):
