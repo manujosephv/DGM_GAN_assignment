@@ -72,7 +72,7 @@ class ConvGeneratorUpsample(nn.Module):
 
 
 class ConvDiscriminator(nn.Module):
-    def __init__(self, num_channels, feature_map_sz):
+    def __init__(self, num_channels, feature_map_sz, sigmoid: bool):
         super(ConvDiscriminator, self).__init__()
         self.main = nn.Sequential(
             # input is (nc) x 64 x 64
@@ -92,7 +92,7 @@ class ConvDiscriminator(nn.Module):
             nn.LeakyReLU(0.2, inplace=True),
             # state size. (ndf*8) x 4 x 4
             nn.Conv2d(feature_map_sz * 8, 1, 4, 1, 0, bias=False),
-            nn.Sigmoid(),
+            nn.Sigmoid() if sigmoid else nn.Identity(),
         )
 
     def forward(self, input):
