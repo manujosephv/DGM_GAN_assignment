@@ -72,7 +72,7 @@ class ConvGeneratorUpsample(nn.Module):
 
 
 class ConvDiscriminator(nn.Module):
-    def __init__(self, num_channels, feature_map_sz, sigmoid: bool):
+    def __init__(self, num_channels, feature_map_sz, sigmoid: bool = True):
         super(ConvDiscriminator, self).__init__()
         self.main = nn.Sequential(
             # input is (nc) x 64 x 64
