@@ -37,6 +37,7 @@ class WGAN(LightningModule):
         b1: float = 0.5,
         b2: float = 0.999,
         upsample=False,
+        clip_value=0.01,
         **kwargs,
     ):
         super().__init__()
@@ -51,6 +52,7 @@ class WGAN(LightningModule):
         self.b2 = b2
         self.n_discriminator_steps = n_discriminator_steps
         self._channels, self._height, self._width = img_dimensions
+        self.clip_value = clip_value
 
         # networks
         if upsample:
@@ -119,6 +121,10 @@ class WGAN(LightningModule):
         # Update D
         optimizer_d.step()
         self.untoggle_optimizer(optimizer_d)
+
+        # Clip weights of discriminator
+        for p in self.discriminator.parameters():
+            p.data.clamp_(-self.clip_value, self.clip_value)
 
         # Training generator every n_discriminator steps
         if (batch_idx + 1) % self.n_discriminator_steps == 0:
