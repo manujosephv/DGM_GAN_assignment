@@ -104,7 +104,7 @@ class ImagePairDataset(Dataset):
 
 
 # pytorch lightning data module to load SVHN-MNIST dataset pair
-class SVHNMNISTDataModule(pl.LightningDataModule):
+class MNISTSVHNDataModule(pl.LightningDataModule):
     def __init__(
         self,
         batch_size=64,
@@ -141,10 +141,10 @@ class SVHNMNISTDataModule(pl.LightningDataModule):
                 self.root_dir, train=False, download=True, transform=transform
             )
             self.train_dataset = ImagePairDataset(
-                self.svhn_dataset_train, self.mnist_dataset_train
+                self.mnist_dataset_train, self.svhn_dataset_train
             )
             self.val_dataset = ImagePairDataset(
-                self.svhn_dataset_val, self.mnist_dataset_val
+                self.mnist_dataset_val, self.svhn_dataset_val
             )
 
     def train_dataloader(self):
@@ -181,7 +181,7 @@ if __name__ == "__main__":
     #     print(batch[1].shape)
     #     break
     # test svhn-mnist data module
-    dm = SVHNMNISTDataModule(
+    dm = MNISTSVHNDataModule(
         batch_size=64,
         num_workers=0,
         size=32,
